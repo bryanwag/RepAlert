@@ -4,7 +4,7 @@ Created on Sun Feb  3 12:38:21 2019
 
 @author: bryan
 """
-import pandas as pd,math,numpy as np,json,requests
+import pandas as pd,math,numpy as np,json,requests,random
 
 #set votes threshold (in NANO) to filter delegators
 #votes_threshold=10000
@@ -99,12 +99,12 @@ def get_delegators_status_df(delegators,badrep,votes_threshold):
             #if there is no successful change, we need the rest of info to determine how to send txns
             if delegators.loc[addy,'success']==0:
                 #we need to increase txns for high transaction number accounts
-                if math.log(transaction_number)<2:
+                if transaction_number<100:
                     #the floor value is 2
                     delegators.loc[addy,'next_spam_number']=2
                 else:
-                    #natural log of transaction number
-                    delegators.loc[addy,'next_spam_number']=round(math.log(transaction_number))
+                    #higher transaction number
+                    delegators.loc[addy,'next_spam_number']=random.randint(2,5)
                     
                 #we check whether the account has pending txns from our addresses
                 url='https://api.nanocrawler.cc/v2/accounts/'+addy+'/pending'
